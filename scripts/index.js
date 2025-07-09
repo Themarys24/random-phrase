@@ -7,21 +7,22 @@ function carregarInfoSerie() {
   getDados(`/series/frases`)
       .then(data => {
         fichaDescricao.innerHTML = `
-              <img src="${data.poster}" alt="${data.titulo}" />
+              <img src="${data.poster}" alt="${data.title}" />
               <div>
-                  <h2>${data.titulo}</h2>
+                  <h2>${data.title}</h2>
                   <div class="descricao-texto">
-                      <p><i>"${data.frase}"</i></p>
-                      <p><b>Citado por:</b> ${data.personagem}</p>
+                      <p><i>"${data.phrase}"</i></p>
+                      <p><b>Quoted by:</b> ${data.character}</p>
                   </div>
               </div>
           `;
       })
       .catch(error => {
-          console.error('Erro ao obter informações da série:', error);
+          console.error('Error getting series information:', error);
       });
 }
 
 
-window.onload = carregarInfoSerie();
+//window.onload = carregarInfoSerie();
 btnSortear.addEventListener('click', carregarInfoSerie);
+window.onload = carregarInfoSerie;
