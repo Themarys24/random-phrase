@@ -1,13 +1,12 @@
 # Etapa 1: Build com Maven + Java 21
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.8.5-openjdk AS build
 WORKDIR /app
-COPY pom.xml .
-COPY src ./src
+COPY . .
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Imagem mínima para rodar o .jar
-FROM openjdk:17-jdk-slim
+FROM openjdk:17.0.1-jdk-slim
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /target/demo-0.0.1-SNAPSHOT.jar demo.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "demo.jar"]
