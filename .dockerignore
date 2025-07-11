@@ -1,0 +1,32 @@
+
+# Arquivos de build
+target/
+*.jar
+*.war
+*.class
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# Documentação
+README.md
+*.md
+
+# Arquivos de configuração local
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
