@@ -16,11 +16,15 @@ public interface PhraseRepository extends JpaRepository<Phrases, Long> {
     // @Query("SELECT p FROM Phrases p ORDER BY FUNCTION('RANDOM')")
     // Phrases searchRandomPhrase();
 
-    // Método alternativo mais simples
+
     @Query("SELECT p FROM Phrases p")
     List<Phrases> findAllPhrases();
 
-    // Método para contar especificamente
+
     @Query("SELECT COUNT(p) FROM Phrases p")
     long countPhrases();
+
+    // Query alternativa para teste
+    @Query(value = "SELECT * FROM frases LIMIT 1", nativeQuery = true)
+    Phrases findFirstPhrase();
 }
