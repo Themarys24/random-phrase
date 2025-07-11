@@ -6,6 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PhraseRepository extends JpaRepository<Phrases, Long> {
 
+    // PostgreSQL usa RANDOM(), não RAND()
     @Query(value = "SELECT * FROM frases ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
     Phrases searchRandomPhrase();
+
+    // Alternativa usando JPA (mais portável):
+    // @Query("SELECT p FROM Phrases p ORDER BY FUNCTION('RANDOM')")
+    // Phrases searchRandomPhrase();
 }
