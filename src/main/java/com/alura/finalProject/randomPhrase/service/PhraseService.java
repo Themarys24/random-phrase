@@ -38,34 +38,46 @@ public class PhraseService {
     }*/
 
     public PhrasesDTO receivingRandomPhrase() {
-        // Para teste local - REMOVER depois
+        // Para teste local
         if (isLocalEnvironment()) {
             return new PhrasesDTO("Teste Local", "Frase de teste local!", "Teste", "poster.jpg");
         }
 
-        // Código normal para produção
+        // Código para produção com DEBUG
         try {
-            Phrases phrases = repository.searchRandomPhrase();
+            System.out.println("🔍 Iniciando busca de frases...");
 
-            // ADICIONE ESTA PARTE QUE ESTAVA FALTANDO:
-            if (phrases != null) {
+            // 1. Contar frases no banco
+            long totalFrases = repository.count();
+            System.out.println("🔍 Total de frases no banco: " + totalFrases);
+
+            // 2. Buscar todas as frases para debug
+            List<Phrases> todasFrases = repository.findAll();
+            System.out.println("🔍 FindAll retornou: " + todasFrases.size() + " frases");
+
+            if (!todasFrases.isEmpty()) {
+                System.out.println("🔍 Primeira frase: " + todasFrases.get(0).getPhrase());
+                // Usar a primeira frase enquanto debugamos
+                Phrases phrase = todasFrases.get(0);
                 return new PhrasesDTO(
-                        phrases.getTitle(),
-                        phrases.getPhrase(),
-                        phrases.getCharacter(),
-                        phrases.getPoster()
+                        phrase.getTitle(),
+                        phrase.getPhrase(),
+                        phrase.getCharacter(),
+                        phrase.getPoster()
                 );
-            } else {
-                return new PhrasesDTO("Aviso", "Nenhuma frase encontrada no banco", "Sistema", "");
             }
 
+            // 3. Se chegou aqui, o banco está vazio
+            return new PhrasesDTO("Debug", "Banco tem " + totalFrases + " frases, mas findAll retornou " + todasFrases.size(), "Sistema", "");
+
         } catch (Exception e) {
-            return new PhrasesDTO("Erro", e.getMessage(), "", "");
+            System.out.println("🚨 Erro: " + e.getMessage());
+            e.printStackTrace();
+            return new PhrasesDTO("Erro", e.getMessage(), "Sistema", "");
         }
     }
 
     private boolean isLocalEnvironment() {
-        return !System.getenv().containsKey("PORT"); // Render sempre tem PORT
+        return !System.getenv().containsKey("PORT");
     }
-
 }
