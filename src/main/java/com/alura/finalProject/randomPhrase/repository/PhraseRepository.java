@@ -4,6 +4,8 @@ import com.alura.finalProject.randomPhrase.model.Phrases;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface PhraseRepository extends JpaRepository<Phrases, Long> {
 
     // PostgreSQL usa RANDOM(), não RAND()
@@ -13,4 +15,12 @@ public interface PhraseRepository extends JpaRepository<Phrases, Long> {
     // Alternativa usando JPA (mais portável):
     // @Query("SELECT p FROM Phrases p ORDER BY FUNCTION('RANDOM')")
     // Phrases searchRandomPhrase();
+
+    // Método alternativo mais simples
+    @Query("SELECT p FROM Phrases p")
+    List<Phrases> findAllPhrases();
+
+    // Método para contar especificamente
+    @Query("SELECT COUNT(p) FROM Phrases p")
+    long countPhrases();
 }
