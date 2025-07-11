@@ -7,35 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
-
-/*@Service
-public class PhraseService {
-    @Autowired
-    private PhraseRepository repository;
-
-    public PhrasesDTO receivingRandomPhrase() {
-        Phrases phrases = repository.searchRandomPhrase();
-        if (phrases == null) {
-            // Retorna um DTO vazio, uma mensagem padrão, ou lança exceção
-            // Exemplo retornando uma frase padrão:
-            return new PhrasesDTO("Nenhuma frase encontrada", "", "", "");
-        }
-        return new PhrasesDTO(phrases.getTitle(), phrases.getPhrase(), phrases.getCharacter(), phrases.getPoster());
-    }
-}*/
 
 @Service
 public class PhraseService {
 
-
     @Autowired
     private PhraseRepository repository;
-
-    /*public PhrasesDTO receivingRandomPhrase() {
-        Phrases phrase = repository.searchRandomPhrase();
-        return new PhrasesDTO(phrase.getTitle(), phrase.getPhrase(), phrase.getCharacter(), phrase.getPoster());
-    }*/
 
     public PhrasesDTO receivingRandomPhrase() {
         // Para teste local
@@ -57,7 +34,7 @@ public class PhraseService {
 
             if (!todasFrases.isEmpty()) {
                 System.out.println("🔍 Primeira frase: " + todasFrases.get(0).getPhrase());
-                // Usar a primeira frase enquanto debugamos
+                // Usar a primeira frase
                 Phrases phrase = todasFrases.get(0);
                 return new PhrasesDTO(
                         phrase.getTitle(),
@@ -68,12 +45,12 @@ public class PhraseService {
             }
 
             // 3. Se chegou aqui, o banco está vazio
-            return new PhrasesDTO("Debug", "Banco tem " + totalFrases + " frases, mas findAll retornou " + todasFrases.size(), "Sistema", "");
+            return new PhrasesDTO("Debug", "Banco tem " + totalFrases + " frases mas findAll = " + todasFrases.size(), "Sistema", "");
 
         } catch (Exception e) {
             System.out.println("🚨 Erro: " + e.getMessage());
             e.printStackTrace();
-            return new PhrasesDTO("Erro", e.getMessage(), "Sistema", "");
+            return new PhrasesDTO("Erro Exception", e.getMessage(), "Sistema", "");
         }
     }
 
