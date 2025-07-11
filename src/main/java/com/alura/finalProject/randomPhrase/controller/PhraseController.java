@@ -8,20 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/phrases") // Adicione esta linha
 public class PhraseController {
 
     @Autowired
     private PhraseService service;
 
-    @GetMapping("/random") // Agora será /api/phrases/random
+    @GetMapping("/series/frases")
     public PhrasesDTO receivingRandomPhrase(){
         return service.receivingRandomPhrase();
-    }
-
-    @GetMapping("/") // Para listar todas (opcional)
-    public String listPhrases(){
-        return "Endpoint para listar frases";
     }
 
 }

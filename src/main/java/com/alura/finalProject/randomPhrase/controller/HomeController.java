@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller
+/*@Controller
 public class HomeController {
 
     @GetMapping("/")
@@ -16,4 +16,4 @@ public class HomeController {
                 "- POST /api/phrases (criar frase)<br>" +
                 "- GET /api/phrases/random (frase aleatória)";
     }
-}
+}*/

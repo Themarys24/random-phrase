@@ -6,6 +6,9 @@ import com.alura.finalProject.randomPhrase.repository.PhraseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Random;
+
 /*@Service
 public class PhraseService {
     @Autowired
@@ -22,68 +25,47 @@ public class PhraseService {
     }
 }*/
 
-/*@Service
-public class PhraseService {
-    @Autowired
-    private PhraseRepository repository;
-
-    public PhrasesDTO receivingRandomPhrase() {
-        // DEBUG: Contar frases no banco
-        long count = repository.count();
-        System.out.println("🔍 Total de frases no banco: " + count);
-
-        Phrases phrases = repository.searchRandomPhrase();
-        System.out.println("🔍 Frase encontrada: " + (phrases != null ? phrases.getPhrase() : "null"));
-
-        if (phrases == null) {
-            // Teste alternativo: buscar primeira frase disponível
-            var allPhrases = repository.findAll();
-            System.out.println("🔍 Total com findAll(): " + allPhrases.size());
-
-            if (!allPhrases.isEmpty()) {
-                phrases = allPhrases.get(0);
-                System.out.println("🔍 Usando primeira frase como teste");
-            } else {
-                return new PhrasesDTO("Banco vazio - " + count + " frases", "", "", "");
-            }
-        }
-
-        return new PhrasesDTO(phrases.getTitle(), phrases.getPhrase(), phrases.getCharacter(), phrases.getPoster());
-    }
-}*/
 @Service
 public class PhraseService {
+
+
     @Autowired
     private PhraseRepository repository;
 
+    /*public PhrasesDTO receivingRandomPhrase() {
+        Phrases phrase = repository.searchRandomPhrase();
+        return new PhrasesDTO(phrase.getTitle(), phrase.getPhrase(), phrase.getCharacter(), phrase.getPoster());
+    }*/
+
     public PhrasesDTO receivingRandomPhrase() {
-        // DEBUG: Contar total
-        long count = repository.count();
-        System.out.println("🔍 Total de frases no banco: " + count);
-
-        // Tentar buscar todas primeiro
-        var allPhrases = repository.findAll();
-        System.out.println("🔍 FindAll retornou: " + allPhrases.size() + " frases");
-
-        if (!allPhrases.isEmpty()) {
-            System.out.println("🔍 Primeira frase encontrada: " + allPhrases.get(0).getPhrase());
+        // Para teste local - REMOVER depois
+        if (isLocalEnvironment()) {
+            return new PhrasesDTO("Teste Local", "Frase de teste local!", "Teste", "poster.jpg");
         }
 
-        // Tentar a query original
-        Phrases phrases = repository.searchRandomPhrase();
-        System.out.println("🔍 Query RANDOM retornou: " + (phrases != null ? phrases.getPhrase() : "null"));
+        // Código normal para produção
+        try {
+            Phrases phrases = repository.searchRandomPhrase();
 
-        if (phrases == null) {
-            // Se a query RANDOM falhou, use uma frase qualquer como teste
-            if (!allPhrases.isEmpty()) {
-                phrases = allPhrases.get(0);
-                System.out.println("🔍 Usando primeira frase como fallback");
+            // ADICIONE ESTA PARTE QUE ESTAVA FALTANDO:
+            if (phrases != null) {
+                return new PhrasesDTO(
+                        phrases.getTitle(),
+                        phrases.getPhrase(),
+                        phrases.getCharacter(),
+                        phrases.getPoster()
+                );
             } else {
-                return new PhrasesDTO("Banco aparentemente vazio", "Nenhuma frase encontrada", "", "");
+                return new PhrasesDTO("Aviso", "Nenhuma frase encontrada no banco", "Sistema", "");
             }
+
+        } catch (Exception e) {
+            return new PhrasesDTO("Erro", e.getMessage(), "", "");
         }
-
-        return new PhrasesDTO(phrases.getTitle(), phrases.getPhrase(), phrases.getCharacter(), phrases.getPoster());
     }
-}
 
+    private boolean isLocalEnvironment() {
+        return !System.getenv().containsKey("PORT"); // Render sempre tem PORT
+    }
+
+}
